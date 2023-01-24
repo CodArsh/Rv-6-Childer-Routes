@@ -1,0 +1,68 @@
+import React from "react";
+import {
+  Grid,
+  Stack,
+  Button,
+  Container,
+  TextField,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+function Login() {
+  const navigate = useNavigate();
+  const login = (e) => {
+    e.preventDefault();
+    navigate("/admin-panel");
+  };
+  return (
+    <>
+      <Container>
+        <Grid container>
+          <Grid item xs={12} sm={6}>
+            DATA
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <h1>Login</h1>
+            <form onSubmit={login}>
+              <Stack direction={"column"} spacing={3}>
+                <TextField label="Username" variant="outlined"></TextField>
+                <TextField
+                  label="Password"
+                  variant="outlined"
+                  type="password"
+                ></TextField>
+                <Stack direction={"row"} justifyContent={"end"}>
+                  <a href="#">Forgot Password ?</a>
+                </Stack>
+                <Stack
+                  direction="row"
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                >
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Checkbox />}
+                      label="Remember me"
+                    />
+                  </FormGroup>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ px: 3, py: 1 }}
+                  >
+                    Login
+                  </Button>
+                </Stack>
+              </Stack>
+              <Link to="/signup">Create an account</Link>
+            </form>
+          </Grid>
+        </Grid>
+      </Container>
+    </>
+  );
+}
+
+export default Login;
