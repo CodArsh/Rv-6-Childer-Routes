@@ -27,4 +27,4 @@ function App() {
 export default App;
 
 # command
-  npm i react-router-dom 
+ npm install @mui/icons-material
