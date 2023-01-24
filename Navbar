@@ -1,0 +1,54 @@
+import React from "react";
+import { Button, Container, Stack } from "@mui/material";
+import "./Navbar.css";
+import Menu from "../json-api/Menu.json";
+import { Link } from "react-router-dom";
+function Navbar() {
+  const MenuButton = ({ data }) => {
+    return (
+      <Link
+        to={data.link}
+        sx={{
+          borderRadius: "0",
+          "&:hover": {
+            transition: "0.5s",
+            backgroundColor: "info.main",
+            color: "#ffffff",
+          },
+        }}
+      >
+        {data.label}
+      </Link>
+    );
+  };
+  return (
+    <>
+      <Stack className="bg-light">
+        <Container className="bg-light">
+          <Stack
+            direction={{
+              xs: "column", // lessthan < 600
+              sm: "row", // greaterthan > 600
+            }}
+            justifyContent={"space-between"}
+          >
+            <h4>Test</h4>
+            <Stack
+              direction={{
+                xs: "column", // lessthan < 600
+                sm: "row", // greaterthan > 600
+              }}
+              spacing={1}
+            >
+              {Menu.map((item) => {
+                return <MenuButton key={item.id} data={item} />;
+              })}
+            </Stack>
+          </Stack>
+        </Container>
+      </Stack>
+    </>
+  );
+}
+
+export default Navbar;
