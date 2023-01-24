@@ -1,11 +1,45 @@
-import React from "react";
-import Navbar from "../../Navbar/Navbar";
-import { Outlet } from "react-router-dom";
+import React, { useState } from "react";
+import Navbar from "../Navbar/Navbar";
+import { Outlet, Link } from "react-router-dom";
+import { AppBar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar } from "@mui/material";
+import { Dashboard, Logout, Menu } from '@mui/icons-material';
 function Admin() {
+  const [active, setActive] = useState(false);
   return (
     <>
-      <Navbar />
-      <Outlet />
+      <Drawer open={active} onClose={() => setActive(!active)} >
+        <Box>
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to={'dashboard'} >
+                <ListItemIcon>
+                  <Dashboard />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Box>
+      </Drawer>
+      <Stack>
+        <AppBar position="static">
+          <Stack direction="row" justifyContent={'space-between'}>
+            <Toolbar>
+              <IconButton color={'inherit'} onClick={() => setActive(!active)} >
+                <Menu />
+              </IconButton>
+            </Toolbar>
+            <Toolbar>
+              <IconButton color={'inherit'} onClick={() => setActive(!active)} >
+                <Logout />
+              </IconButton>
+            </Toolbar>
+          </Stack>
+        </AppBar>
+        <Box sx={{ p: 3 }}>
+          <Outlet />
+        </Box>
+      </Stack>
     </>
   );
 }
