@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "label": "Dashboard",
+    "link": "dashboard"
+  },
+  {
+    "id": 2,
+    "label": "Courses",
+    "link": "/"
+  },
+  {
+    "id": 3,
+    "label": "Admission",
+    "link": "/"
+  },
+  {
+    "id": 4,
+    "label": "Contact",
+    "link": "/"
+  },
+  {
+    "id": 5,
+    "label": "About",
+    "link": "/"
+  }
+]
