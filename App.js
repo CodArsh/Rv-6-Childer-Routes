@@ -17,6 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/admin-panel" element={<Admin />}>
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -26,6 +27,7 @@ function App() {
 }
 
 export default App;
+
 
 # command
  npm i material-icons@latest
