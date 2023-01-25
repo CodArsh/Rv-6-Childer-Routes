@@ -1,6 +1,7 @@
 import "./App.css";
 // import Navbar from "./Navbar/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "material-icons/iconfont/material-icons.css";
 import Signup from "./CMP/Signup/Signup";
 import Admin from "./CMP/Admin/Admin";
 import Login from "./CMP/Login/Login";
@@ -27,4 +28,4 @@ function App() {
 export default App;
 
 # command
- npm install @mui/icons-material
+ npm i material-icons@latest
