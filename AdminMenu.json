@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "label": "Dashboard",
+    "icon": "dashboard"
+  },
+  {
+    "id": 2,
+    "label": "Compose",
+    "icon": "message"
+  },
+  {
+    "id": 3,
+    "label": "Inbox",
+    "icon": "inbox"
+  },
+  {
+    "id": 4,
+    "label": "Access",
+    "icon": "access_time"
+  },
+  {
+    "id": 5,
+    "label": "Logout",
+    "icon": "logout"
+  }
+]
