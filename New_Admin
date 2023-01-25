@@ -3,6 +3,7 @@ import React, { useState } from "react";
 // import { Outlet, Link } from "react-router-dom";
 import {
   AppBar,
+  Collapse,
   Drawer,
   IconButton,
   List,
@@ -10,26 +11,63 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
   Stack,
   Toolbar,
 } from "@mui/material";
 import AdminMenu from "../../json-api/AdminMenu.json";
+import { Link, Outlet } from "react-router-dom";
 function Admin() {
   const [active, setActive] = useState(true);
   const [width, setWidth] = useState(250);
   const controlDrawer = () => {
     return setActive(!active), active ? setWidth(0) : setWidth(250);
   };
+  const [collaps, setCollaps] = useState(false);
   const Nav = ({ data }) => {
     return (
-      <ListItem disablePadding>
-        <ListItemButton>
-          <ListItemIcon>
-            <span className="material-icons">{data.icon}</span>
-          </ListItemIcon>
-          <ListItemText primary={data.label} />
-        </ListItemButton>
-      </ListItem>
+      <>
+        <ListItem sx={{ py: 0 }}>
+          <ListItemButton
+            onClick={data.isDropdown ? () => setCollaps(!collaps) : null}
+            component={Link}
+            to={data.link ? data.link : false}
+          >
+            <ListItemIcon>
+              <span className="material-icons">{data.icon}</span>
+            </ListItemIcon>
+            <ListItemText primary={data.label} />
+            {data.isDropdown && (
+              <span className="material-icons">
+                {collaps ? "arrow_drop_up" : "arrow_drop_down"}
+              </span>
+            )}
+          </ListItemButton>
+        </ListItem>
+        {data.isDropdown && <DropDown menu={data.dropDownMenu} />}
+      </>
+    );
+  };
+  const MenuList = ({ admin }) => {
+    return (
+      <>
+        <List subheader={<ListSubheader>{admin.cat}</ListSubheader>}>
+          {admin.menus.map((menu) => {
+            return <Nav key={menu.id} data={menu} />;
+          })}
+        </List>
+      </>
+    );
+  };
+  const DropDown = ({ menu }) => {
+    return (
+      <>
+        <Collapse in={collaps} sx={{ pl: 4 }}>
+          {menu.map((item) => {
+            return <Nav data={item} key={item.id} />;
+          })}
+        </Collapse>
+      </>
     );
   };
   return (
@@ -42,15 +80,21 @@ function Admin() {
             width: width,
             "& .MuiDrawer-paper": {
               width: width,
-              bgcolor: "#f5f5f5",
+              bgcolor: "#fff",
             },
           }}
         >
-          <List>
-            {AdminMenu.map((item) => {
-              return <Nav key={item.id} data={item} />;
-            })}
-          </List>
+          <List
+            sx={{ mt: 4 }}
+            subheader={
+              <ListSubheader>
+                <img src="logo.webp" width={"200"} alt="brand-logo" />
+              </ListSubheader>
+            }
+          />
+          {AdminMenu.map((admin) => {
+            return <MenuList key={admin.id} admin={admin} />;
+          })}
         </Drawer>
         <AppBar
           position="fixed"
@@ -68,7 +112,7 @@ function Admin() {
           </Toolbar>
         </AppBar>
         <Stack sx={{ transition: "0.1s", ml: `${width}px`, mt: 5, p: 3 }}>
-          <h1>Hello World</h1>
+          <Outlet />
         </Stack>
       </Stack>
     </>
