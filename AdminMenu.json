@@ -1,95 +1,95 @@
 [
-  {
-    "id": 1,
-    "cat": "DASHBOARD",
-    "menus": [
-      {
-        "id": 2,
-        "label": "Modern",
-        "icon": "airplay",
-        "link": "modern"
-      },
-      {
-        "id": 3,
-        "label": "Analytics",
-        "icon": "auto_graph",
-        "link": "analytics"
-      },
-      {
-        "id": 4,
-        "label": "Ecommerce",
-        "icon": "shopping_bag",
-        "link": "ecommerce"
-      }
-    ]
-  },
-  {
-    "id": 5,
-    "cat": "APPS",
-    "menus": [
-      {
-        "id": 6,
-        "label": "Chat",
-        "icon": "chat_bubble",
-        "link": "chat"
-      },
-      {
-        "id": 7,
-        "label": "Notes",
-        "icon": "description",
-        "link": "notes"
-      },
-      {
-        "id": 8,
-        "label": "Mail",
-        "icon": "mail",
-        "link": "mail"
-      },
-      {
-        "id": 9,
-        "label": "Calendar",
-        "icon": "schedule",
-        "link": "calendar"
-      },
-      {
-        "id": 10,
-        "label": "Customers",
-        "icon": "group",
-        "link": "customers",
-        "isDropdown": true,
-        "dropDownMenu": [
-          {
-            "id": 14,
-            "label": "List",
-            "icon": "list",
-            "link": "customers-list"
-          },
-          {
-            "id": 15,
-            "label": "Edit",
-            "icon": "edit",
-            "link": "customers-edit"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": 11,
-    "cat": "AUTHENTICATION",
-    "menus": [
-      {
-        "id": 12,
-        "label": "Reset Password",
-        "icon": "password",
-        "link": "reset-password"
-      },
-      {
-        "id": 13,
-        "label": "Logout",
-        "icon": "logout",
-        "link": "logout"
-      }
-    ]
-  }
-]
+    {
+      "id": 1,
+      "cat": "DASHBOARD",
+      "menus": [
+        {
+          "id": 2,
+          "label": "Modern",
+          "icon": "airplay",
+          "link": "modern"
+        },
+        {
+          "id": 3,
+          "label": "Analytics",
+          "icon": "auto_graph",
+          "link": "analytics"
+        },
+        {
+          "id": 4,
+          "label": "Ecommerce",
+          "icon": "shopping_bag",
+          "link": "ecommerce"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "cat": "APPS",
+      "menus": [
+        {
+          "id": 6,
+          "label": "Chat",
+          "icon": "chat_bubble_outlined",
+          "link": "chat"
+        },
+        {
+          "id": 7,
+          "label": "Notes",
+          "icon": "description",
+          "link": "notes"
+        },
+        {
+          "id": 8,
+          "label": "Mail",
+          "icon": "mail",
+          "link": "mail"
+        },
+        {
+          "id": 9,
+          "label": "Calendar",
+          "icon": "schedule",
+          "link": "calendar"
+        },
+        {
+          "id": 10,
+          "label": "Customers",
+          "icon": "group",
+          "link": "customers",
+          "isDropdown": true,
+          "dropDownMenu": [
+            {
+              "id": 14,
+              "label": "List",
+              "icon": "list",
+              "link": "customers-list"
+            },
+            {
+              "id": 15,
+              "label": "Edit",
+              "icon": "edit",
+              "link": "customers-edit"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "cat": "AUTHENTICATION",
+      "menus": [
+        {
+          "id": 12,
+          "label": "Reset Password",
+          "icon": "password",
+          "link": "reset-password"
+        },
+        {
+          "id": 13,
+          "label": "Logout",
+          "icon": "logout",
+          "link": "logout"
+        }
+      ]
+    }
+  ]
