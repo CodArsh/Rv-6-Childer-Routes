@@ -3,7 +3,9 @@ import React, { useState } from "react";
 // import { Outlet, Link } from "react-router-dom";
 import {
   AppBar,
+  Avatar,
   Collapse,
+  Divider,
   Drawer,
   IconButton,
   List,
@@ -12,6 +14,8 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
+  Menu,
+  MenuItem,
   Stack,
   Toolbar,
 } from "@mui/material";
@@ -20,9 +24,24 @@ import { Link, Outlet } from "react-router-dom";
 function Admin() {
   const [active, setActive] = useState(true);
   const [width, setWidth] = useState(250);
+
+  // Start - Open Profile Menu
+  const [parent, setParent] = useState(null);
+  const open = Boolean(parent);
   const controlDrawer = () => {
     return setActive(!active), active ? setWidth(0) : setWidth(250);
   };
+  const openProfile = (e) => {
+    const element = e.currentTarget;
+    return setParent(element);
+
+  }
+
+  const closeProfileMenu = () => {
+    return setParent(null)
+  }
+  // End - Open Profile Menu
+
   const [collaps, setCollaps] = useState(false);
   const Nav = ({ data }) => {
     return (
@@ -34,11 +53,11 @@ function Admin() {
             to={data.link ? data.link : false}
           >
             <ListItemIcon>
-              <span className="material-icons">{data.icon}</span>
+              <span className="material-icons-outlined">{data.icon}</span>
             </ListItemIcon>
             <ListItemText primary={data.label} />
             {data.isDropdown && (
-              <span className="material-icons">
+              <span className="material-icons-outlined">
                 {collaps ? "arrow_drop_up" : "arrow_drop_down"}
               </span>
             )}
@@ -70,6 +89,7 @@ function Admin() {
       </>
     );
   };
+
   return (
     <>
       <Stack>
@@ -97,21 +117,112 @@ function Admin() {
           })}
         </Drawer>
         <AppBar
+          elevation={0}
+          color="primary"
           position="fixed"
           sx={{
             width: `calc(100% - ${width}px)`,
             transition: "0.1s",
+            pr: 4
           }}
         >
-          <Toolbar>
-            <IconButton color="inherit" onClick={controlDrawer}>
-              <span className="material-icons">
-                {!active ? "menu" : "arrow_back"}
-              </span>
-            </IconButton>
-          </Toolbar>
+          <Stack direction="row" justifyContent={'space-between'}>
+            <Toolbar>
+              <IconButton color="inherit" onClick={controlDrawer}>
+                <span className="material-icons-outlined">
+                  {!active ? "menu" : "arrow_back"}
+                </span>
+              </IconButton>
+            </Toolbar>
+            <Toolbar>
+              <Stack direction={'row'} spacing={'5px'} alignItems={'center'}>
+                <IconButton color="inherit">
+                  <span className="material-icons-outlined">
+                    shopping_basket
+                  </span>
+                </IconButton>
+                <IconButton color="inherit">
+                  <span className="material-icons-outlined">
+                    mail
+                  </span>
+                </IconButton>
+                <IconButton color="inherit">
+                  <span className="material-icons-outlined">
+                    notifications
+                  </span>
+                </IconButton>
+                <IconButton onClick={openProfile} color="inherit">
+                  <Avatar src="https://avatars.githubusercontent.com/u/95223801?s=40&v=4" />
+                </IconButton>
+                <Menu
+                  anchorEl={parent}
+                  open={open}
+                  onClick={closeProfileMenu}
+                  onClose={closeProfileMenu}
+                  PaperProps={{
+                    elevation: 0,
+                    sx: {
+                      overflow: 'visible',
+                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                      mt: 1.5,
+                      '& .MuiAvatar-root': {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
+                      },
+                      '&:before': {
+                        content: '""',
+                        display: 'block',
+                        position: 'absolute',
+                        top: 0,
+                        right: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: 'background.paper',
+                        transform: 'translateY(-50%) rotate(45deg)',
+                        zIndex: 0,
+                      },
+                    },
+                  }}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuItem><Avatar />Profile</MenuItem>
+                  <MenuItem><Avatar />Account</MenuItem>
+                  <Divider />
+                  <MenuItem>
+                    <ListItemIcon>
+                      <span className="material-icons-outlined" style={{ marginRight: '10px' }} >
+                        person_add
+                      </span>
+                      Add another account
+                    </ListItemIcon>
+                  </MenuItem>
+
+                  <MenuItem>
+                    <ListItemIcon>
+                      <span className="material-icons-outlined" style={{ marginRight: '10px' }}>
+                        settings
+                      </span>
+                      Setting
+                    </ListItemIcon>
+                  </MenuItem>
+
+                  <MenuItem>
+                    <ListItemIcon>
+                      <span className="material-icons-outlined" style={{ marginRight: '10px' }}>
+                        logout
+                      </span>
+                      Logout
+                    </ListItemIcon>
+                  </MenuItem>
+                </Menu>
+              </Stack>
+            </Toolbar>
+          </Stack>
         </AppBar>
-        <Stack sx={{ transition: "0.1s", ml: `${width}px`, mt: 5, p: 3 }}>
+        <Stack sx={{ transition: "0.1s", ml: `${width}px`, mt: 5, p: 3, bgcolor: '#f5f5f5', height: '100vh' }}>
           <Outlet />
         </Stack>
       </Stack>
