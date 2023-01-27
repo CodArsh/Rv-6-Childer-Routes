@@ -1,0 +1,72 @@
+import {
+  Button,
+  Typography,
+  Grid,
+  TextField,
+  FormGroup,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
+import { Stack } from "@mui/system";
+import React from "react";
+import MediaQuery from "react-responsive";
+import { Link } from "react-router-dom";
+function Signup() {
+  return (
+    <>
+      <Grid container>
+        <Grid item lg={6}>
+          <MediaQuery minWidth={1080}>
+            <img alt="auth" src="auth.svg" />
+          </MediaQuery>
+          <MediaQuery maxWidth={1080}>
+            <img alt="auth" src="mobile-auth.PNG" />
+          </MediaQuery>
+        </Grid>
+        <Grid item sx={{ p: 5 }} lg={6}>
+          <Typography variant="h5" sx={{ mb: 5 }}>
+            Register
+          </Typography>
+          <form>
+            <Stack direction={"column"} spacing={3}>
+              <TextField label="Username" variant="outlined"></TextField>
+              <TextField
+                type="number"
+                label="Mobile"
+                variant="outlined"
+              ></TextField>
+              <TextField label="Email" variant="outlined"></TextField>
+              <TextField
+                type="password"
+                label="Password"
+                variant="outlined"
+              ></TextField>
+              <Stack
+                direction={"row"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+              >
+                <FormGroup>
+                  <FormControlLabel
+                    label="I accept terms and conditions."
+                    control={<Checkbox color="warning" />}
+                  />
+                </FormGroup>
+                <Button type="button" component={Link} to="login">
+                  Already have an account
+                </Button>
+              </Stack>
+              <div>
+                <Button sx={{ py: 1 }} type="submit" variant="contained">
+                  Signup
+                </Button>
+              </div>
+            </Stack>
+          </form>
+        </Grid>
+      </Grid>
+    </>
+  );
+}
+
+export default Signup;
