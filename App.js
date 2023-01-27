@@ -30,4 +30,4 @@ export default App;
 
 
 # command
- npm i material-icons@latest
+ npm install react-responsive
