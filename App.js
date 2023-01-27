@@ -57,3 +57,4 @@ export default App;
 
 # command
  npm install react-responsive
+ npm i @fontsource/source-sans-pro
