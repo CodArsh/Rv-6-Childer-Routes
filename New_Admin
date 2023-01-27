@@ -19,6 +19,7 @@ import {
   Stack,
   Toolbar,
   Breadcrumbs,
+  Typography,
 } from "@mui/material";
 import AdminMenu from "../../json-api/AdminMenu.json";
 import { deepOrange } from "@mui/material/colors";
@@ -32,7 +33,7 @@ import {
 } from "react-router-dom";
 function Admin() {
   const [active, setActive] = useState(true);
-  const [activeMobile, setActiveMobile] = useState(false);
+  const [activeMobile, setActiveMobile] = useState(true);
   const [width, setWidth] = useState(250);
   const location = useLocation();
   let routing = location.pathname.split("/");
@@ -354,6 +355,12 @@ function Admin() {
             })}
           </Breadcrumbs>
           <Outlet />
+          <MediaQuery minWidth={1080}>
+            <Typography>DESK</Typography>
+          </MediaQuery>
+          <MediaQuery maxWidth={1080}>
+            <Typography>Mob</Typography>
+          </MediaQuery>
         </Stack>
       </Stack>
     </>
