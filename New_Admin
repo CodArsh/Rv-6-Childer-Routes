@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import Navbar from "../Navbar/Navbar";
 // import { Outlet, Link } from "react-router-dom";
 import {
@@ -18,32 +18,49 @@ import {
   MenuItem,
   Stack,
   Toolbar,
+  Breadcrumbs,
 } from "@mui/material";
 import AdminMenu from "../../json-api/AdminMenu.json";
-import { Link, Outlet } from "react-router-dom";
+import { deepOrange } from "@mui/material/colors";
+import MediaQuery from "react-responsive";
+import {
+  Link,
+  Outlet,
+  useResolvedPath,
+  useMatch,
+  useLocation,
+} from "react-router-dom";
 function Admin() {
   const [active, setActive] = useState(true);
+  const [activeMobile, setActiveMobile] = useState(false);
   const [width, setWidth] = useState(250);
-
+  const location = useLocation();
+  let routing = location.pathname.split("/");
   // Start - Open Profile Menu
   const [parent, setParent] = useState(null);
   const open = Boolean(parent);
-  const controlDrawer = () => {
+  const controlDrawerDesktop = () => {
     return setActive(!active), active ? setWidth(0) : setWidth(250);
+  };
+  const controlDrawerMobile = () => {
+    return (
+      setActiveMobile(!activeMobile), activeMobile ? setWidth(0) : setWidth(250)
+    );
   };
   const openProfile = (e) => {
     const element = e.currentTarget;
     return setParent(element);
-
-  }
+  };
 
   const closeProfileMenu = () => {
-    return setParent(null)
-  }
+    return setParent(null);
+  };
   // End - Open Profile Menu
 
   const [collaps, setCollaps] = useState(false);
   const Nav = ({ data }) => {
+    const resolve = useResolvedPath(data.link ? data.link : false);
+    const activeLink = useMatch({ path: resolve.pathname, end: true });
     return (
       <>
         <ListItem sx={{ py: 0 }}>
@@ -51,9 +68,18 @@ function Admin() {
             onClick={data.isDropdown ? () => setCollaps(!collaps) : null}
             component={Link}
             to={data.link ? data.link : false}
+            style={{
+              background: activeLink && deepOrange[500],
+              color: activeLink && "#fff",
+            }}
           >
             <ListItemIcon>
-              <span className="material-icons-outlined">{data.icon}</span>
+              <span
+                className="material-icons-outlined"
+                style={{ color: activeLink && "#fff" }}
+              >
+                {data.icon}
+              </span>
             </ListItemIcon>
             <ListItemText primary={data.label} />
             {data.isDropdown && (
@@ -89,10 +115,24 @@ function Admin() {
       </>
     );
   };
-
-  return (
-    <>
-      <Stack>
+  const BreadLink = ({ data }) => {
+    return (
+      <Link
+        // to={data.item !== "admin-panel" && data.item}
+        style={{
+          textDecoration: "none",
+          textTransform: "capitalize",
+          color: data.index === data.length ? deepOrange[500] : "#777",
+          fontWeight: data.index === routing.length - 1 && "bold",
+        }}
+      >
+        {data.item}
+      </Link>
+    );
+  };
+  const DesktopDrawer = () => {
+    return (
+      <>
         <Drawer
           variant="persistent"
           open={active}
@@ -116,40 +156,87 @@ function Admin() {
             return <MenuList key={admin.id} admin={admin} />;
           })}
         </Drawer>
-        <AppBar
-          elevation={0}
-          color="primary"
-          position="fixed"
+      </>
+    );
+  };
+  const MobileDrawer = () => {
+    return (
+      <>
+        <Drawer
+          variant="temporary"
+          onClose={controlDrawerMobile}
+          onClick={controlDrawerMobile}
+          open={activeMobile}
           sx={{
-            width: `calc(100% - ${width}px)`,
-            transition: "0.1s",
-            pr: 4
+            width: width,
+            "& .MuiDrawer-paper": {
+              width: width,
+              bgcolor: "#fff",
+            },
           }}
         >
-          <Stack direction="row" justifyContent={'space-between'}>
+          <List
+            sx={{ mt: 4 }}
+            subheader={
+              <ListSubheader>
+                <img src="logo.webp" width={"200"} alt="brand-logo" />
+              </ListSubheader>
+            }
+          />
+          {AdminMenu.map((admin) => {
+            return <MenuList key={admin.id} admin={admin} />;
+          })}
+        </Drawer>
+      </>
+    );
+  };
+  return (
+    <>
+      <Stack>
+        <MediaQuery minWidth={1080}>
+          <DesktopDrawer />
+        </MediaQuery>
+        <MediaQuery maxWidth={1080}>
+          <MobileDrawer />
+        </MediaQuery>
+        <AppBar
+          elevation={0}
+          position="fixed"
+          sx={{
+            width: {
+              xs: "100%",
+              md: `calc(100% - ${width}px)`,
+            },
+            transition: "0.1s",
+            background: deepOrange[500],
+            pr: 4,
+          }}
+        >
+          <Stack direction="row" justifyContent={"space-between"}>
             <Toolbar>
-              <IconButton color="inherit" onClick={controlDrawer}>
-                <span className="material-icons-outlined">
-                  {!active ? "menu" : "arrow_back"}
-                </span>
-              </IconButton>
+              <MediaQuery minWidth={1080}>
+                <IconButton color="inherit" onClick={controlDrawerDesktop}>
+                  <span className="material-icons-outlined">menu</span>
+                </IconButton>
+              </MediaQuery>
+              <MediaQuery maxWidth={1080}>
+                <IconButton color="inherit" onClick={controlDrawerMobile}>
+                  <span className="material-icons-outlined">menu</span>
+                </IconButton>
+              </MediaQuery>
             </Toolbar>
             <Toolbar>
-              <Stack direction={'row'} spacing={'5px'} alignItems={'center'}>
+              <Stack direction={"row"} spacing={"5px"} alignItems={"center"}>
                 <IconButton color="inherit">
                   <span className="material-icons-outlined">
                     shopping_basket
                   </span>
                 </IconButton>
                 <IconButton color="inherit">
-                  <span className="material-icons-outlined">
-                    mail
-                  </span>
+                  <span className="material-icons-outlined">mail</span>
                 </IconButton>
                 <IconButton color="inherit">
-                  <span className="material-icons-outlined">
-                    notifications
-                  </span>
+                  <span className="material-icons-outlined">notifications</span>
                 </IconButton>
                 <IconButton onClick={openProfile} color="inherit">
                   <Avatar src="https://avatars.githubusercontent.com/u/95223801?s=40&v=4" />
@@ -162,38 +249,47 @@ function Admin() {
                   PaperProps={{
                     elevation: 0,
                     sx: {
-                      overflow: 'visible',
-                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                      overflow: "visible",
+                      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
                       mt: 1.5,
-                      '& .MuiAvatar-root': {
+                      "& .MuiAvatar-root": {
                         width: 32,
                         height: 32,
                         ml: -0.5,
                         mr: 1,
                       },
-                      '&:before': {
+                      "&:before": {
                         content: '""',
-                        display: 'block',
-                        position: 'absolute',
+                        display: "block",
+                        position: "absolute",
                         top: 0,
                         right: 14,
                         width: 10,
                         height: 10,
-                        bgcolor: 'background.paper',
-                        transform: 'translateY(-50%) rotate(45deg)',
+                        bgcolor: "background.paper",
+                        transform: "translateY(-50%) rotate(45deg)",
                         zIndex: 0,
                       },
                     },
                   }}
-                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  transformOrigin={{ horizontal: "right", vertical: "top" }}
+                  anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
-                  <MenuItem><Avatar />Profile</MenuItem>
-                  <MenuItem><Avatar />Account</MenuItem>
+                  <MenuItem>
+                    <Avatar />
+                    Profile
+                  </MenuItem>
+                  <MenuItem>
+                    <Avatar />
+                    Account
+                  </MenuItem>
                   <Divider />
                   <MenuItem>
                     <ListItemIcon>
-                      <span className="material-icons-outlined" style={{ marginRight: '10px' }} >
+                      <span
+                        className="material-icons-outlined"
+                        style={{ marginRight: "10px" }}
+                      >
                         person_add
                       </span>
                       Add another account
@@ -202,7 +298,10 @@ function Admin() {
 
                   <MenuItem>
                     <ListItemIcon>
-                      <span className="material-icons-outlined" style={{ marginRight: '10px' }}>
+                      <span
+                        className="material-icons-outlined"
+                        style={{ marginRight: "10px" }}
+                      >
                         settings
                       </span>
                       Setting
@@ -211,7 +310,10 @@ function Admin() {
 
                   <MenuItem>
                     <ListItemIcon>
-                      <span className="material-icons-outlined" style={{ marginRight: '10px' }}>
+                      <span
+                        className="material-icons-outlined"
+                        style={{ marginRight: "10px" }}
+                      >
                         logout
                       </span>
                       Logout
@@ -222,7 +324,35 @@ function Admin() {
             </Toolbar>
           </Stack>
         </AppBar>
-        <Stack sx={{ transition: "0.1s", ml: `${width}px`, mt: 5, p: 3, bgcolor: '#f5f5f5', height: '100vh' }}>
+        <Stack
+          sx={{
+            transition: "0.1s",
+            ml: {
+              xs: 0,
+              md: `${width}px`,
+            },
+            mt: 5,
+            p: 3,
+            bgcolor: "#f5f5f5",
+            height: "100vh",
+          }}
+        >
+          <Breadcrumbs aria-label="breadcrumb" sx={{ my: 4 }}>
+            {routing.map((item, index) => {
+              if (index > 0) {
+                return (
+                  <BreadLink
+                    key={index}
+                    data={{
+                      item: item,
+                      index: index,
+                      length: routing.length - 1,
+                    }}
+                  />
+                );
+              }
+            })}
+          </Breadcrumbs>
           <Outlet />
         </Stack>
       </Stack>
