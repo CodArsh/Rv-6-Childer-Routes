@@ -16,7 +16,7 @@ import {
   pink,
   lightBlue,
 } from "@mui/material/colors";
-import "@fontsource/source-sans-pro/400.css";
+import "@fontsource/source-sans-pro"
 function App() {
   const Theme = createTheme({
     palette: {
@@ -52,7 +52,6 @@ function App() {
 }
 
 export default App;
-
 
 
 # command
