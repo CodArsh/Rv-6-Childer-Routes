@@ -8,10 +8,170 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { Stack } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import MediaQuery from "react-responsive";
 import { Link } from "react-router-dom";
 function Signup() {
+  const signupForm = {
+    username: "",
+    mobile: "",
+    email: "",
+    password: ""
+  }
+  const signupFormError = {
+    username: {
+      state: false,
+      msg: ""
+    },
+    mobile: {
+      state: false,
+      msg: ""
+    },
+    email: {
+      state: false,
+      msg: ""
+    },
+    password: {
+      state: false,
+      msg: ""
+    }
+  }
+  const [input, setInput] = useState(signupForm);
+  const [error, setError] = useState(signupFormError);
+
+  const usernameValidation = (e) => {
+    const input = e.target;
+    const key = input.name;
+    const isRequired = required(input);
+    return (setError((oldData) => {
+      return {
+        ...oldData,
+        [key]: isRequired
+      }
+    }))
+  }
+
+  const mobileValidation = (e) => {
+    const input = e.target;
+    const key = input.name;
+    const isRequired = required(input);
+    console.log(isRequired);
+    const isMinLength = minLength(input, 10);
+    return (setError((oldData) => {
+      return {
+        ...oldData,
+        [key]: isRequired.state && isRequired || isMinLength
+      }
+    }))
+  }
+
+  const emailValidation = (e) => {
+    const input = e.target;
+    const key = input.name;
+    const isRequired = required(input);
+    const isEmail = emailSyntax(input)
+    console.log(isRequired);
+    return (setError((oldData) => {
+      return {
+        ...oldData,
+        [key]: !isRequired.state && isEmail || isRequired
+      }
+    }))
+  }
+
+  const passwordValidation = (e) => {
+    const input = e.target;
+    const key = input.name;
+    const isRequired = required(input);
+    const isMinLength = minLength(input, 8);
+    const isValidpassword = passwordSyntax(input)
+    return (setError((oldData) => {
+      return {
+        ...oldData,
+        [key]: isRequired.state && isRequired ||
+          isValidpassword.state && isValidpassword ||
+          isMinLength
+      }
+    }))
+  }
+  const required = (input) => {
+    const value = input.value.trim();
+    if (value.length === 0) {
+      return {
+        state: true,
+        msg: "This field is required !"
+      }
+    }
+    else {
+      return {
+        state: false,
+        msg: ""
+      }
+    }
+  }
+
+  const emailSyntax = (input) => {
+    const value = input.value;
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    if (regex.test(value)) {
+      return {
+        state: false,
+        msg: ""
+      }
+    }
+    else {
+      return {
+        state: true,
+        msg: "Email is not valid"
+      }
+    }
+  }
+
+  const passwordSyntax = (input) => {
+    const value = input.value;
+    const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=)/g;
+    if (regex.test(value)) {
+      return {
+        state: false,
+        msg: ""
+      }
+    }
+    else {
+      return {
+        state: true,
+        msg: "Password contains upper-lower-symbol-number"
+      }
+    }
+  }
+
+  const minLength = (input, minLength) => {
+    const value = input.value.trim();
+    if (value.length < minLength) {
+      return {
+        state: true,
+        msg: `Minimum ${minLength} characters required`
+      }
+    }
+    else {
+      return {
+        state: false,
+        msg: ""
+      }
+    }
+  }
+  const updateValue = (e) => {
+    const input = e.target;
+    const key = input.name;
+    const value = input.value;
+    return (
+      setInput((old_data) => {
+        return {
+          ...old_data,
+          [key]: value
+        }
+      })
+    )
+  }
   return (
     <>
       <Grid container>
@@ -29,14 +189,46 @@ function Signup() {
           </Typography>
           <form>
             <Stack direction={"column"} spacing={3}>
-              <TextField label="Username" variant="outlined"></TextField>
               <TextField
+                error={error.username.state}
+                helperText={error.username.msg}
+                label="Username"
+                variant="outlined"
+                name="username"
+                value={input.username}
+                onChange={updateValue}
+                onBlur={usernameValidation}
+                onInput={usernameValidation}
+              ></TextField>
+              <TextField
+                error={error.mobile.state}
+                helperText={error.mobile.msg}
+                onBlur={mobileValidation}
+                onInput={mobileValidation}
+                name="mobile"
+                value={input.mobile}
+                onChange={updateValue}
                 type="number"
                 label="Mobile"
                 variant="outlined"
               ></TextField>
-              <TextField label="Email" variant="outlined"></TextField>
               <TextField
+                error={error.email.state}
+                helperText={error.email.msg}
+                onBlur={emailValidation}
+                onInput={emailValidation}
+                name="email"
+                value={input.email}
+                onChange={updateValue}
+                label="Email" variant="outlined"></TextField>
+              <TextField
+                error={error.password.state}
+                helperText={error.password.msg}
+                onBlur={passwordValidation}
+                name="password"
+                value={input.password}
+                onChange={updateValue}
+                onInput={passwordValidation}
                 type="password"
                 label="Password"
                 variant="outlined"
