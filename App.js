@@ -16,7 +16,8 @@ import {
   pink,
   lightBlue,
 } from "@mui/material/colors";
-import "@fontsource/source-sans-pro"
+import "@fontsource/source-sans-pro";
+import AuthGuard from "./guard/AuthGuard";
 function App() {
   const Theme = createTheme({
     palette: {
@@ -39,9 +40,11 @@ function App() {
             {/* <Route path="/" element={<h1>Homepage</h1>} /> */}
             <Route path="/" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/admin-panel" element={<Admin />}>
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="*" element={<NotFound />} />
+            <Route element={<AuthGuard />} >
+              <Route path="/admin-panel" element={<Admin />}>
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -54,6 +57,25 @@ function App() {
 export default App;
 
 
+
 # command
  npm install react-responsive
  npm i @fontsource/source-sans-pro
+
+
+
+create hooks folder in src
+npm i axios
+npm i react-bootstrap-sweetalert
+npm i universal-cookies
+create guard folder in src
+
+
+redux
+---------------
+npm i redux-logger
+npm i redux-thunk
+npm i font-awesome
+
+// Extra
+resume worded (site)
