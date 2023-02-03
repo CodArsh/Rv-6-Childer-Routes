@@ -8,48 +8,123 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { Stack } from "@mui/system";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MediaQuery from "react-responsive";
 import { Link } from "react-router-dom";
+import useHttp from "../../Hooks/useHttp";
+import SweetAlert from "react-bootstrap-sweetalert";
+import Cookies from "universal-cookie";
 function Signup() {
+  const cookie = new Cookies();
   const signupForm = {
-    username: "",
-    mobile: "",
-    email: "",
-    password: ""
-  }
+    username: "Arsil",
+    mobile: "1234567890",
+    email: "arsil@gmail.com",
+    password: "123Ars@12",
+  };
   const signupFormError = {
     username: {
       state: false,
-      msg: ""
+      msg: "",
     },
     mobile: {
       state: false,
-      msg: ""
+      msg: "",
     },
     email: {
       state: false,
-      msg: ""
+      msg: "",
     },
     password: {
       state: false,
-      msg: ""
-    }
-  }
+      msg: "",
+    },
+  };
   const [input, setInput] = useState(signupForm);
   const [error, setError] = useState(signupFormError);
+  const [checked, setChecked] = useState(false);
+  const [request, setRequest] = useState(null);
+  const [httpResponse, httpError, loader] = useHttp(request);
+  const [sweetAlert, setSweetAlert] = useState({
+    state: false,
+    title: "",
+    icon: "default",
+    msg: "",
+  });
+
+  useEffect(() => {
+    if (request) {
+      if (httpResponse) {
+        cookie.set("authToken", httpResponse.token, { maxAge: 86400 });
+        return setSweetAlert({
+          state: true,
+          title: "Signup Success",
+          icon: "success",
+          msg: "Signup is completed, now you can try to login",
+        });
+      } else if (httpError) {
+        return setSweetAlert({
+          state: true,
+          title: "Signup Failed !",
+          icon: "error",
+          msg: httpError.data.message,
+        });
+      }
+    }
+  }, [httpResponse, httpError, loader]);
+  const Alert = () => {
+    return (
+      <>
+        <SweetAlert
+          show={sweetAlert.state}
+          title={sweetAlert.title}
+          type={sweetAlert.icon}
+          customButtons={
+            <>
+              <Button
+                onClick={() =>
+                  setSweetAlert({
+                    state: false,
+                  })
+                }
+                variant="outlined"
+                color="warning"
+                sx={{ py: 1, mr: 2 }}
+              >
+                Cancel
+              </Button>
+              {httpResponse ? (
+                <Button
+                  variant="contained"
+                  color="warning"
+                  sx={{ py: 1 }}
+                  component={Link}
+                  to="/admin-panel"
+                >
+                  Login
+                </Button>
+              ) : null}
+            </>
+          }
+          onConfirm={() => {}}
+        >
+          {sweetAlert.msg}
+        </SweetAlert>
+      </>
+    );
+  };
 
   const usernameValidation = (e) => {
     const input = e.target;
     const key = input.name;
     const isRequired = required(input);
-    return (setError((oldData) => {
+    return setError((oldData) => {
       return {
         ...oldData,
-        [key]: isRequired
-      }
-    }))
-  }
+        [key]: isRequired,
+      };
+    });
+  };
 
   const mobileValidation = (e) => {
     const input = e.target;
@@ -57,58 +132,58 @@ function Signup() {
     const isRequired = required(input);
     console.log(isRequired);
     const isMinLength = minLength(input, 10);
-    return (setError((oldData) => {
+    return setError((oldData) => {
       return {
         ...oldData,
-        [key]: isRequired.state && isRequired || isMinLength
-      }
-    }))
-  }
+        [key]: (isRequired.state && isRequired) || isMinLength,
+      };
+    });
+  };
 
   const emailValidation = (e) => {
     const input = e.target;
     const key = input.name;
     const isRequired = required(input);
-    const isEmail = emailSyntax(input)
+    const isEmail = emailSyntax(input);
     console.log(isRequired);
-    return (setError((oldData) => {
+    return setError((oldData) => {
       return {
         ...oldData,
-        [key]: !isRequired.state && isEmail || isRequired
-      }
-    }))
-  }
+        [key]: (!isRequired.state && isEmail) || isRequired,
+      };
+    });
+  };
 
   const passwordValidation = (e) => {
     const input = e.target;
     const key = input.name;
     const isRequired = required(input);
     const isMinLength = minLength(input, 8);
-    const isValidpassword = passwordSyntax(input)
-    return (setError((oldData) => {
+    const isValidpassword = passwordSyntax(input);
+    return setError((oldData) => {
       return {
         ...oldData,
-        [key]: isRequired.state && isRequired ||
-          isValidpassword.state && isValidpassword ||
-          isMinLength
-      }
-    }))
-  }
+        [key]:
+          (isRequired.state && isRequired) ||
+          (isValidpassword.state && isValidpassword) ||
+          isMinLength,
+      };
+    });
+  };
   const required = (input) => {
     const value = input.value.trim();
     if (value.length === 0) {
       return {
         state: true,
-        msg: "This field is required !"
-      }
-    }
-    else {
+        msg: "This field is required !",
+      };
+    } else {
       return {
         state: false,
-        msg: ""
-      }
+        msg: "",
+      };
     }
-  }
+  };
 
   const emailSyntax = (input) => {
     const value = input.value;
@@ -116,16 +191,15 @@ function Signup() {
     if (regex.test(value)) {
       return {
         state: false,
-        msg: ""
-      }
-    }
-    else {
+        msg: "",
+      };
+    } else {
       return {
         state: true,
-        msg: "Email is not valid"
-      }
+        msg: "Email is not valid",
+      };
     }
-  }
+  };
 
   const passwordSyntax = (input) => {
     const value = input.value;
@@ -133,45 +207,71 @@ function Signup() {
     if (regex.test(value)) {
       return {
         state: false,
-        msg: ""
-      }
-    }
-    else {
+        msg: "",
+      };
+    } else {
       return {
         state: true,
-        msg: "Password contains upper-lower-symbol-number"
-      }
+        msg: "Password contains upper-lower-symbol-number",
+      };
     }
-  }
+  };
 
   const minLength = (input, minLength) => {
     const value = input.value.trim();
     if (value.length < minLength) {
       return {
         state: true,
-        msg: `Minimum ${minLength} characters required`
-      }
-    }
-    else {
+        msg: `Minimum ${minLength} characters required`,
+      };
+    } else {
       return {
         state: false,
-        msg: ""
-      }
+        msg: "",
+      };
     }
-  }
+  };
   const updateValue = (e) => {
     const input = e.target;
     const key = input.name;
     const value = input.value;
-    return (
-      setInput((old_data) => {
-        return {
-          ...old_data,
-          [key]: value
-        }
-      })
-    )
-  }
+    return setInput((old_data) => {
+      return {
+        ...old_data,
+        [key]: value,
+      };
+    });
+  };
+
+  const validateOnSubmit = () => {
+    let valid = true;
+    for (let key in input) {
+      if (input[key].length === 0) {
+        valid = false;
+        setError((old_data) => {
+          return {
+            ...old_data,
+            [key]: {
+              state: true,
+              msg: "This field is required",
+            },
+          };
+        });
+      }
+    }
+    return valid;
+  };
+  const register = (e) => {
+    e.preventDefault();
+    const isValid = validateOnSubmit();
+    if (isValid) {
+      return setRequest({
+        method: "post",
+        url: "/signup",
+        data: input,
+      });
+    }
+  };
   return (
     <>
       <Grid container>
@@ -185,9 +285,10 @@ function Signup() {
         </Grid>
         <Grid item sx={{ p: 5 }} lg={6}>
           <Typography variant="h5" sx={{ mb: 5 }}>
+            {/* {httpResponse && JSON.stringify(httpResponse)} */}
             Register
           </Typography>
-          <form>
+          <form onSubmit={register}>
             <Stack direction={"column"} spacing={3}>
               <TextField
                 error={error.username.state}
@@ -220,7 +321,9 @@ function Signup() {
                 name="email"
                 value={input.email}
                 onChange={updateValue}
-                label="Email" variant="outlined"></TextField>
+                label="Email"
+                variant="outlined"
+              ></TextField>
               <TextField
                 error={error.password.state}
                 helperText={error.password.msg}
@@ -241,7 +344,13 @@ function Signup() {
                 <FormGroup>
                   <FormControlLabel
                     label="I accept terms and conditions."
-                    control={<Checkbox color="warning" />}
+                    control={
+                      <Checkbox
+                        checked={checked}
+                        color="warning"
+                        onChange={() => setChecked(!checked)}
+                      />
+                    }
                   />
                 </FormGroup>
                 <Button type="button" component={Link} to="login">
@@ -249,12 +358,24 @@ function Signup() {
                 </Button>
               </Stack>
               <div>
-                <Button sx={{ py: 1 }} type="submit" variant="contained">
+                <Button
+                  disabled={
+                    error.username.state ||
+                    error.mobile.state ||
+                    error.email.state ||
+                    error.password.state ||
+                    !checked
+                  }
+                  sx={{ py: 1 }}
+                  type="submit"
+                  variant="contained"
+                >
                   Signup
                 </Button>
               </div>
             </Stack>
           </form>
+          <Alert />
         </Grid>
       </Grid>
     </>
