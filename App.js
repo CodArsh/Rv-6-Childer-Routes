@@ -79,3 +79,7 @@ npm i font-awesome
 
 // Extra
 resume worded (site)
+
+
+#Plan_B
+https://we.tl/t-ZH69haeO0W
