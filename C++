@@ -1,0 +1,26 @@
+C++
+
+1. Class & Object
+https://youtu.be/EHlS220qNwI
+https://youtu.be/4CMKICwgC0M
+https://youtu.be/GbysUdjjZ10
+
+2. Constructor & Destructor
+https://youtu.be/Et8rgvXXVBk
+https://youtu.be/_P1YRBOtioE
+https://youtu.be/r3O9bvuRgX0
+
+3. New & Delete
+https://youtu.be/sRBB_qX4lKY
+
+4. This Pointer
+https://youtu.be/UPVl-6FrDQA
+
+5. Members access through pointer
+-
+
+6. Deep copy & shallow copy
+https://youtu.be/nCAVr_T4DbM
+
+7. DMA
+https://youtu.be/27QLVnn74Eg
